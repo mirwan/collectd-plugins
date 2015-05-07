@@ -114,9 +114,11 @@ def read(data=None):
     global client
     jails = client.list_jails()
     for jail in jails:
-        v1 = collectd.Values(type='gauge', interval=10)
-        v1.plugin='fail2ban-jails-' + jail
-        v1.dispatch(values=[client.get_banned(jail)])
+        v1 = collectd.Values(plugin='fail2ban-jails')
+        v1.plugin_instance = jail
+        v1.type='gauge'
+        v1.values = [client.get_banned(jail)]
+        v1.dispatch()
 
 collectd.register_read(read)
 collectd.register_init(init)
