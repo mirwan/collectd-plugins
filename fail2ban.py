@@ -28,7 +28,11 @@ import collectd
 
 # Inserts our own modules path first in the list
 # fix for bug #343821
-sys.path.insert(1, "/usr/share/fail2ban")
+try:
+    from common.version import version
+except ImportError, e:
+    sys.path.insert(1, "/usr/share/fail2ban")
+    from common.version import version
 
 # Now we can import our modules
 from client.csocket import CSocket
