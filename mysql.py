@@ -440,7 +440,12 @@ def fetch_innodb_stats(conn):
 				for key in MYSQL_INNODB_STATUS_MATCHES[match]:
 					value = MYSQL_INNODB_STATUS_MATCHES[match][key]
 					if type(value) is int:
+                                            try:
 						stats[key] = int(row[value])
+                                            except ValueError:
+                                                log_notice('%s not an int in line %s. Discarding' % (row[value], line))
+                                            except IndexError:
+                                                log_notice('%s index not in %s. Discarding' % (value, row))
 					else:
 						stats[key] = value(row, stats)
 				break
@@ -451,6 +456,9 @@ def log_verbose(msg):
 	if MYSQL_CONFIG['Verbose'] == False:
 		return
 	collectd.info('mysql plugin: %s' % msg)
+
+def log_notice(msg):
+    collectd.notice('mysql plugin: %s' % msg)
 
 def dispatch_value(prefix, key, value, type, type_instance=None):
 	if not type_instance:
