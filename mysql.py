@@ -466,7 +466,7 @@ def dispatch_value(prefix, key, value, type, type_instance=None):
 
 	log_verbose('Sending value: %s/%s=%s' % (prefix, type_instance, value))
 	if not value:
-                log_notice('Not sending %s/%s' % (prefix, type_instance) 
+                log_notice('Not sending %s/%s' % (prefix, type_instance))
 		return
 	value = int(value) # safety check
 
